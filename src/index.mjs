@@ -10,7 +10,7 @@ const errors = checker(sourceAst);
 console.log("Errors v1: ", errors);
 
 const sourceCodeV2 = `
-  fn("craig-string"); // throw with string vs number
+  fn("craig-string"); // throw with string vs ?
   function fn(a: made_up_type) {} // throw with bad type
 `;
 
