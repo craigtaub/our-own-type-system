@@ -1,3 +1,12 @@
+// const sourceCodeV2 = `
+//   interface Person {
+//     name: string;
+//   }
+
+//   fn({nam: "craig"}); // throw with "nam" vs "name"
+//   function fn(a: Person) {}
+// `;
+
 const sourceCode = `
   fn("craig-string"); // throw with string vs number
   function fn(a: number) {}
@@ -37,7 +46,7 @@ function parser(code) {
           // our only type annotation
           type: "TypeAnnotation",
           typeAnnotation: {
-            type: "NumberTypeAnnotation"
+            type: "NumberTypeAnnotation" // BREAK: "NumberTypeAnnotation_bad"
           }
         }
       }
@@ -62,17 +71,45 @@ function parser(code) {
 const ANNOTATED_TYPES = {
   NumberTypeAnnotation: "number"
 };
-function typeCheck(arg1, arg2) {
-  switch (arg1) {
-    case "NumberTypeAnnotation":
-      return arg2 === "NumericLiteral";
+
+// Logic for type checks
+const typeChecks = {
+  expression: (arg1, arg2) => {
+    switch (arg1) {
+      case "NumberTypeAnnotation":
+        return arg2 === "NumericLiteral";
+    }
+  },
+  annotationCheck: arg => {
+    return !!ANNOTATED_TYPES[arg];
   }
-}
+};
 
 function checker(ast) {
   const errors = [];
   ast.program.body.map(stnmt => {
     switch (stnmt.type) {
+      case "FunctionDeclaration":
+        stnmt.params.map(arg => {
+          // Does arg has a type annotation?
+          if (arg.typeAnnotation) {
+            const argType = arg.typeAnnotation.typeAnnotation.type;
+            // Is type annotation valid
+            const isValid = typeChecks.annotationCheck(argType);
+            if (!isValid) {
+              errors.push(
+                `Type "${argType}" for argument "${arg.name}" does not exist`
+              );
+            }
+          }
+        });
+
+        // Process function "block" code here
+        stnmt.body.body.map(line => {
+          // Ours has none
+        });
+
+        return;
       case "ExpressionStatement":
         const functionCalled = stnmt.expression.callee.name;
         const declationForName = ast.program.body.find(
@@ -101,7 +138,7 @@ function checker(ast) {
           const callerValue = arg.value;
 
           // Declaration annotation more important here
-          const isValid = typeCheck(declarationType, callerType);
+          const isValid = typeChecks.expression(declarationType, callerType);
           if (!isValid) {
             const annotatedType = ANNOTATED_TYPES[declarationType];
             // Show values to user, more explanatory than types
