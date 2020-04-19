@@ -328,17 +328,21 @@ function checker(ast) {
   return errors;
 }
 
-// const sourceCode = `
-//   fn("craig-string"); // throw with string vs number
-//   function fn(a: number) {}
-// `;
-// const sourceAst = parser(sourceCode);
+const sourceCode = `
+  fn("craig-string"); // throw with string vs number
+  function fn(a: number) {}
+`;
+const sourceAst = parser(sourceCode);
+const errors = checker(sourceAst);
+console.log("Errors v1: ", errors);
 
-// const sourceCodeV1pt5 = `
-//   fn("craig-string"); // throw with string vs number
-//   function fn(a: made_up_type) {} // throw with bad type
-// `;
-// const sourceAst = parserV1pt5(sourceCodeV1pt5);
+const sourceCodeV1pt5 = `
+  fn("craig-string"); // throw with string vs number
+  function fn(a: made_up_type) {} // throw with bad type
+`;
+const sourceAstV1pt5 = parserV1pt5(sourceCodeV1pt5);
+const errorsV1pt5 = checker(sourceAstV1pt5);
+console.log("Errors v1.5: ", errorsV1pt5);
 
 const sourceCodeV2 = `
   interface Person {
@@ -347,7 +351,6 @@ const sourceCodeV2 = `
   fn({nam: "craig"}); // throw with "nam" vs "name"
   function fn(a: Person) {}
 `;
-const sourceAst = parserV2(sourceCodeV2);
-
-const errors = checker(sourceAst);
-console.log("Errors: ", errors);
+const sourceAstV2 = parserV2(sourceCodeV2);
+const errorsV2 = checker(sourceAstV2);
+console.log("Errors v2: ", errorsV2);
