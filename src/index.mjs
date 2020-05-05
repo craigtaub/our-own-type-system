@@ -7,7 +7,7 @@ const sourceCode = `
 `;
 const sourceAst = parser(sourceCode);
 const errors = checker(sourceAst);
-console.log("Errors v1: ", errors);
+console.log("Errors for `Scenarios 1`: ", errors);
 
 const sourceCodeV2 = `
   fn("craig-string"); // throw with string vs ?
@@ -16,7 +16,7 @@ const sourceCodeV2 = `
 
 const sourceAstV2 = parserV2(sourceCodeV2);
 const errorsV2 = checker(sourceAstV2);
-console.log("Errors v2: ", errorsV2);
+console.log("Errors for `Scenarios 2`: ", errorsV2);
 
 const sourceCodeV3 = `
   interface Person {
@@ -27,4 +27,4 @@ const sourceCodeV3 = `
 `;
 const sourceAstV3 = parserV3(sourceCodeV3);
 const errorsV3 = checker(sourceAstV3);
-console.log("Errors v3: ", errorsV3);
+console.log("Errors for `Scenarios 3`: ", errorsV3);
