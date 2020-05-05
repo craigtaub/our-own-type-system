@@ -6,7 +6,7 @@ function parserV3(code) {
     type: "InterfaceDeclaration",
     id: {
       type: "Identifier",
-      name: "Person"
+      name: "Person",
     },
     body: {
       type: "ObjectTypeAnnotation",
@@ -15,16 +15,16 @@ function parserV3(code) {
           type: "ObjectTypeProperty",
           key: {
             type: "Identifier",
-            name: "name"
+            name: "name",
           },
           kind: "init",
           method: false,
           value: {
-            type: "StringTypeAnnotation"
-          }
-        }
-      ]
-    }
+            type: "StringTypeAnnotation",
+          },
+        },
+      ],
+    },
   };
 
   // fn({nam: "craig"});
@@ -34,7 +34,7 @@ function parserV3(code) {
       type: "CallExpression",
       callee: {
         type: "Identifier",
-        name: "fn"
+        name: "fn",
       },
       arguments: [
         {
@@ -45,17 +45,17 @@ function parserV3(code) {
               method: false,
               key: {
                 type: "Identifier",
-                name: "nam"
+                name: "nam",
               },
               value: {
                 type: "StringLiteral",
-                value: "craig"
-              }
-            }
-          ]
-        }
-      ]
-    }
+                value: "craig",
+              },
+            },
+          ],
+        },
+      ],
+    },
   };
 
   // function fn(a: Person) {}
@@ -63,7 +63,7 @@ function parserV3(code) {
     type: "FunctionDeclaration",
     id: {
       type: "Identifier",
-      name: "fn"
+      name: "fn",
     },
     params: [
       {
@@ -75,24 +75,24 @@ function parserV3(code) {
             type: "GenericTypeAnnotation",
             id: {
               type: "Identifier",
-              name: "Person"
-            }
-          }
-        }
-      }
+              name: "Person",
+            },
+          },
+        },
+      },
     ],
     body: {
       type: "BlockStatement",
-      body: [] // Empty function
-    }
+      body: [], // Empty function
+    },
   };
 
   const programAst = {
     type: "File",
     program: {
       type: "Program",
-      body: [interfaceAst, expressionAst, declarationAst]
-    }
+      body: [interfaceAst, expressionAst, declarationAst],
+    },
   };
   // normal AST except with typeAnnotations on
   return programAst;
@@ -106,23 +106,23 @@ function parserV2(code) {
       type: "CallExpression",
       callee: {
         type: "Identifier",
-        name: "fn"
+        name: "fn",
       },
       arguments: [
         {
           type: "StringLiteral", // Parser "Inference" for type.
-          value: "craig-string"
-        }
-      ]
-    }
+          value: "craig-string",
+        },
+      ],
+    },
   };
 
-  // function fn(a: number) {}
+  // function fn(a: made_up_type) {}
   const declarationAst = {
     type: "FunctionDeclaration",
     id: {
       type: "Identifier",
-      name: "fn"
+      name: "fn",
     },
     params: [
       {
@@ -132,23 +132,23 @@ function parserV2(code) {
           // our only type annotation
           type: "TypeAnnotation",
           typeAnnotation: {
-            type: "made_up_type" // BREAKS
-          }
-        }
-      }
+            type: "made_up_type", // BREAKS
+          },
+        },
+      },
     ],
     body: {
       type: "BlockStatement",
-      body: [] // "body" === block/line of code. Ours is empty
-    }
+      body: [], // "body" === block/line of code. Ours is empty
+    },
   };
 
   const programAst = {
     type: "File",
     program: {
       type: "Program",
-      body: [expressionAst, declarationAst]
-    }
+      body: [expressionAst, declarationAst],
+    },
   };
   // normal AST except with typeAnnotations on
   return programAst;
@@ -162,15 +162,15 @@ function parser(code) {
       type: "CallExpression",
       callee: {
         type: "Identifier",
-        name: "fn"
+        name: "fn",
       },
       arguments: [
         {
           type: "StringLiteral", // Parser "Inference" for type.
-          value: "craig-string"
-        }
-      ]
-    }
+          value: "craig-string",
+        },
+      ],
+    },
   };
 
   // function fn(a: number) {}
@@ -178,7 +178,7 @@ function parser(code) {
     type: "FunctionDeclaration",
     id: {
       type: "Identifier",
-      name: "fn"
+      name: "fn",
     },
     params: [
       {
@@ -188,23 +188,23 @@ function parser(code) {
           // our only type annotation
           type: "TypeAnnotation",
           typeAnnotation: {
-            type: "NumberTypeAnnotation"
-          }
-        }
-      }
+            type: "NumberTypeAnnotation",
+          },
+        },
+      },
     ],
     body: {
       type: "BlockStatement",
-      body: [] // "body" === block/line of code. Ours is empty
-    }
+      body: [], // "body" === block/line of code. Ours is empty
+    },
   };
 
   const programAst = {
     type: "File",
     program: {
       type: "Program",
-      body: [expressionAst, declarationAst]
-    }
+      body: [expressionAst, declarationAst],
+    },
   };
   // normal AST except with typeAnnotations on
   return programAst;
